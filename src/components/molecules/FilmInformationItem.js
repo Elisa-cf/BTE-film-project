@@ -4,7 +4,7 @@
  */
 
 import P from '../atoms/P'
-import H4 from "../atoms/H4";
+import TD from '../atoms/TD'
 
 /**
  * Film information item component
@@ -12,12 +12,11 @@ import H4 from "../atoms/H4";
  * @returns {JSX.Element}
  */
 const FilmInformationItem = (props) => {
-    return (
-        <tr>
-            <td><H4>{props.title}</H4></td>
-            <td><P>{props.text}</P></td>
-        </tr>
-    )
+    return (<tr>
+            <TD><P><b>{props.title}</b></P></TD>
+            {/* If there is a link prop, make the item into a link */}
+            {props.link ? <TD><a href={props.text}><P>{props.text}</P></a></TD> : <TD><P>{props.text}</P></TD>}
+        </tr>)
 }
 
 export default FilmInformationItem

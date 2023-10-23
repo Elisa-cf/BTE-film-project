@@ -16,13 +16,22 @@ import P from "../atoms/P"
  */
 const SearchResultCard = (props) => {
     return (
-        <NavLink to={`/${props.media}/${props.item.id}`}>
-            <ResultCard>
-                <img
+        <ResultCard>
+            <NavLink to={`/${props.media}/${props.item.id}`}>
+
+                {/* If there is a poster draw it */}
+                {props.item.poster_path && <img
                     src={`http://image.tmdb.org/t/p/w500${ props.item.poster_path }`}
                     alt={ props.item.title || props.item.name }
-                    onError={(e)=> e.target.src = `http://via.placeholder.com/260x370/dddddd/?text=Poster Missing`}
-                />
+                    onError={(e)=> e.target.src = `http://via.placeholder.com/260x370/dddddd/?text=${props.item.name}`}
+                />}
+
+                {/* If there is no poster use the placeholder automatically and prevent 404 errors*/}
+                {!props.item.poster_path && <img
+                    src={`http://via.placeholder.com/260x370/dddddd/?text=${props.item.name}`}
+                    alt={ props.item.title || props.item.name }
+                 />}
+
                 <section>
                     <ResultCardTitleBar>
                         <H3>{props.item.title || props.item.name}</H3>
@@ -30,8 +39,8 @@ const SearchResultCard = (props) => {
                     </ResultCardTitleBar>
                     <p>Released: {formatDate(props.item.release_date)}</p>
                 </section>
-            </ResultCard>
-        </NavLink>
+            </NavLink>
+        </ResultCard>
     )
 }
 

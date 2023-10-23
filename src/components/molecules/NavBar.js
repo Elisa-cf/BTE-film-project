@@ -17,6 +17,12 @@ const NavBar = () => {
 
     const { darkMode, setDarkMode } = useContext(ThemeContext);
 
+    // Store the theme preference in local storage
+    const themeHandler = () => {
+        localStorage.setItem('darkMode', `${!darkMode}`);
+        setDarkMode(!darkMode)
+    }
+
     return (
       <Nav>
           <div>
@@ -25,7 +31,7 @@ const NavBar = () => {
                 <NavHeading>Film Hero</NavHeading>
               </Link>
           </div>
-          <Button onClick={() => setDarkMode(!darkMode)}>{darkMode ? 'Light' : 'Dark'}</Button>
+          <Button onClick={themeHandler}>{darkMode ? 'Light' : 'Dark'}</Button>
       </Nav>
     );
 }

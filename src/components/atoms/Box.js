@@ -1,3 +1,7 @@
+/**
+ * Box.js
+ * Styled Component for the genre bubbles
+ */
 import styled from "styled-components";
 
 const Box = styled.div`

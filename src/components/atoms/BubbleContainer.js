@@ -7,7 +7,6 @@ import styled from "styled-components";
 const BubbleContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
-    //place-content: center;
 `
 
 export default BubbleContainer;

@@ -3,7 +3,7 @@
  * Allows the user to select which country they live in
  */
 import countryCodes from "../../assets/countryCodes";
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import { uid } from 'uid'
 import H3 from "../atoms/H3";
 import Select from "../atoms/Select";
@@ -32,14 +32,14 @@ const WhereToWatchCountry = (props) => {
     }
 
     // JSX
-    return (<>
-
-        <H3>Where to watch</H3>
-        <CountryContainer>
-            <Select value={selectValue} onChange={selectHandler}>
-                {countryCodes.sort().map(country => <option key={uid()} value={country.iso_3166_1}>{country.native_name}</option>)}
-            </Select>
-        </CountryContainer>
+    return (
+        <>
+            <H3>Where to watch</H3>
+            <CountryContainer>
+                <Select value={selectValue} onChange={selectHandler}>
+                    {countryCodes.map(country => <option key={uid()} value={country.code}>{country.name}</option>)}
+                </Select>
+            </CountryContainer>
         </>
     )
 }

@@ -24,12 +24,16 @@ import P from '../components/atoms/P';
  */
 const HomePage = () => {
 
-    // Setup a state variable to store the search results
+    // Setup the state variables to store the movie data
     const [searchData, setSearchData] = useState([])
+    const [movieData, setMovieData] = useState([])
     const [tvData, setTvData] = useState([])
     const [popularData, setPopularData] = useState([])
-    const [toggleTV, setToggleTV] = useState(false)
+
+    // Setup the state variables to store user things
+    const [searchFilter, setSearchFilter] = useState('All')
     const [message, setMessage] = useState('')
+    const [hasSearched, setHasSearched] = useState(false)
 
     /**
      * Handler for when the user search for something
@@ -50,14 +54,16 @@ const HomePage = () => {
         // Get the data the with axios
         axios
             .get(base_url + '/search/movie?query=' + encoded + '&' + api_key)
-            .then(response => setSearchData([...response.data.results]))
+            .then(response => setMovieData([...response.data.results]))
             .catch(error => console.log(error))
         axios
             .get(base_url + '/search/tv?query=' + encoded + '&' + api_key)
             .then((response) => setTvData([...response.data.results]))
             .catch((error) => console.log(error));
 
-    } 
+        // Change the has searched flag to enable the useEffect below
+        setHasSearched(true);
+    }
 
     // Get the data for trending movies of the day
     useEffect(() => {
@@ -67,32 +73,74 @@ const HomePage = () => {
             .catch(error => console.log(error))
     }, [])
 
-    console.log(popularData)
+
+    // Filters and sorts the data when it comes in
+    useEffect(() => {
+
+        // We need to add the type of media to have the correct link for the search results
+        const movies = movieData.map(item => {
+            item.media_type = 'movie'
+            return item
+        })
+        const tv = tvData.map(item => {
+            item.media_type = 'tv'
+            return item
+        })
+
+        // Filter the data based on what the user has chosen
+        let combinedData = [];
+        if (searchFilter === 'All') combinedData = [...movies, ...tv];
+        if (searchFilter === 'Movies') combinedData = [...movies];
+        if (searchFilter === 'TV') combinedData = [...tv];
+
+        // If there are no results, send the user a message
+        if(hasSearched && combinedData.length === 0) setMessage('No results found')
+        else setMessage('')
+
+        // Sort the data by popularity to show the most relevant items first
+        combinedData = combinedData.sort((a, b) => parseFloat(b.popularity) - parseFloat(a.popularity));
+
+        // Store the search result data in the state
+        setSearchData(combinedData)
+
+    }, [movieData, tvData, hasSearched, searchFilter])
+
+    /**
+     * filterButtonHandler
+     * Switches between the filter mode when the user presses the button
+     */
+    const filterButtonHandler = () => {
+        if(searchFilter === 'All') setSearchFilter('Movies')
+        else if(searchFilter === 'Movies') setSearchFilter('TV')
+        else setSearchFilter('All')
+    }
+
     // JSX
     return (
         <MainContainer>
 
             <HomeImage />
+
             {/* The search component for finding a movie */}
             <Search searchHandler={searchHandler} />
 
-            { message !== '' && <MessageBox msg={message} />}
-            {/* TODO improve this */}
-            {((searchData.length > 0) || (tvData.length > 0)) && <FilterContainer>
-                {!toggleTV && <P>Found {searchData.length} results:</P>}
-                {toggleTV && <P>Found {tvData.length} results:</P>}
-                <Button onClick={() => setToggleTV(!toggleTV)}>{toggleTV ? 'Show Films' : 'Show TV Series'}</Button>
+            {/* Display the number of search results as well as the filter button */}
+            {searchData.length > 0 && <FilterContainer>
+                <P>Found {searchData.length} results:</P>
+                <Button onClick={filterButtonHandler}>Filter: {searchFilter}</Button>
             </FilterContainer>}
 
+            {/* If theres a message for the user, display it */}
+            { message !== '' && <MessageBox msg={message} />}
 
             {/* Display each result on a card once we have the results data, if there is no data show the carousel */}
             <ResultCardContainer>
-                {!toggleTV && searchData.map(item => <SearchResultCard key={uid()} item={item} media='movie'/>)}
-                {toggleTV && tvData.map(item => <SearchResultCard key={uid()} item={item} media='tv'/>)}
+                {searchData && searchData.map(item => <SearchResultCard key={uid()} item={item} media={item.media_type}/>)}
             </ResultCardContainer>
 
             {/* Display Carousel of popular movies */}
             <Carousel data={popularData} />
+
         </MainContainer>
     );
 }

@@ -26,7 +26,6 @@ const SearchInput = styled.input`
 
     @media screen and (min-width:1141px) {
         font-size: 16px;
-        //padding: 13px 13px;
     }
 
 `

@@ -6,7 +6,6 @@ import styled from "styled-components";
 
 const NavHeading = styled.h2`
   margin: 0 10px;
-  padding: 0px;
   color: ${props => props.theme.colors.SiteTitle};
   font-weight: bold;
   font-size: 1.4rem;

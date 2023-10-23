@@ -7,7 +7,6 @@ import styled from "styled-components";
 const TrailerIframe = styled.iframe`
   border: 0;
   width: 100%;
-  //height: 100%;
   aspect-ratio: 16 / 9;
 `;
 

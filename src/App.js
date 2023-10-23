@@ -3,7 +3,7 @@
  * Main app component
  */
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Theme from "./styles/Theme";
 import ThemeContext from "./contexts/ThemeContext";
 import { GlobalStyle, GlobalStyleDark } from "./styles/GlobalStyles";
@@ -23,12 +23,11 @@ import './App.css';
 function App() {
 
   const [darkMode, setDarkMode] = useState(true);
-  /*useEffect(() => localStorage.setItem('darkMode', darkMode.toString()), [darkMode])
+  // Get the users theme preference from the localstorage and set the theme when the page loads
   useEffect(() => {
-    console.log(typeof(localStorage.getItem('darkMode')))
-    if(localStorage.getItem('darkMode') === 'false') setDarkMode(true)
-    else setDarkMode(false)
-  }, [])*/
+    const value = localStorage.getItem('darkMode')
+    value === 'true' ? setDarkMode(true) : setDarkMode(false)
+  }, [])
 
   return (
       <ThemeContext.Provider value={{darkMode, setDarkMode}}>

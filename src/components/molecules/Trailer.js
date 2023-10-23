@@ -38,21 +38,28 @@ const Trailer = (props) => {
      * Checks if the trailer exists and is on youtube
      * @param data
      */
-    const checkTrailer = (data) => data.results[0].site === "YouTube" ? setTrailerData(data) : null;
+    const checkTrailer = (data) => {
+        // This syntax stops the error
+        if(data.results[0] !== undefined) {
+            if(data.results[0].site === "YouTube") setTrailerData(data)
+        }
+    }
 
     // JSX
 
     return (
-        <div>
+      <section>
+        {trailerData && (<>
             <H3>Trailer</H3>
-                {trailerData && <TrailerIframe
-                    src={`https://www.youtube.com/embed/${trailerData.results[0].key}`}
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                />}
-        </div>
+            <TrailerIframe
+                src={`https://www.youtube.com/embed/${trailerData.results[0].key}`}
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            />
+        </>)}
+      </section>
     );
 }
 
