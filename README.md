@@ -8,11 +8,6 @@ when the user browses the information for a film.
 
 All the data is provided by The Movie DB API https://www.themoviedb.org/
 
-Film Hero was written by 3 students as a project for the Wild Code School:
-- Eleonora Weber
-- Elisa Canyelles
-- Tim Coggins
-
 ## Features
 - Auto-detection of the user location to provide country based information
 - Ability to search for TV shows and films
